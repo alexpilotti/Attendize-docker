@@ -9,4 +9,5 @@ RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg
 RUN docker-php-ext-install bcmath gd zip pdo_mysql pdo_pgsql
 RUN rm -rf /tmp/* /var/cache/*
 RUN apt clean && rm -rf /var/lib/apt/lists/*
+COPY php.ini /usr/local/etc/php/
 
