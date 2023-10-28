@@ -4,10 +4,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php && \
     php -r "unlink('composer-setup.php');" && \
     mv composer.phar /usr/local/bin/composer
-RUN apt update && apt install -y zlib1g-dev libpng-dev libzip-dev libxrender1 libpq-dev libjpeg-dev libpng-dev libfreetype6-dev libxext6 libfontconfig
+RUN apt update && apt install -y zlib1g-dev libpng-dev libzip-dev libxrender1 libpq-dev libjpeg-dev libpng-dev libfreetype6-dev libxext6 libfontconfig crudini
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg
 RUN docker-php-ext-install bcmath gd zip pdo_mysql pdo_pgsql
 RUN rm -rf /tmp/* /var/cache/*
 RUN apt clean && rm -rf /var/lib/apt/lists/*
-COPY php.ini /usr/local/etc/php/
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN /usr/bin/crudini --set $PHP_INI_DIR/php.ini PHP upload_max_filesize 4M
 
